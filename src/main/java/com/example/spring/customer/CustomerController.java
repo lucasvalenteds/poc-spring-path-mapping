@@ -61,4 +61,15 @@ public class CustomerController {
 
         return Flux.fromIterable(customersCars.getOrDefault(customerId, List.of()));
     }
+
+    @GetMapping(path = "/{customerId}/cars/{carId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<Car> findCustomerCars(@PathVariable("customerId") String customerId,
+                                      @PathVariable("carId") String carId
+    ) {
+        logger.info("Returning car with ID {} from customer with ID {}", carId, customerId);
+
+        return Flux.fromIterable(customersCars.getOrDefault(customerId, List.of()))
+            .filter(car -> car.getId().equals(carId))
+            .singleOrEmpty();
+    }
 }

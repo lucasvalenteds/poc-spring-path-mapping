@@ -32,7 +32,7 @@ class CustomerControllerTest {
 
     @Test
     void testFindingOneCustomer() {
-        String customerId = "abc/123";
+        String customerId = "def/456";
 
         Customer customer = client.get()
             .uri("/customers/{customerId}", customerId)
@@ -43,8 +43,8 @@ class CustomerControllerTest {
             .getResponseBody();
 
         assertNotNull(customer);
-        assertEquals("abc/123", customer.getId());
-        assertEquals("John Smith", customer.getName());
+        assertEquals("def/456", customer.getId());
+        assertEquals("Paul Anderson", customer.getName());
     }
 
     @Test
@@ -65,5 +65,24 @@ class CustomerControllerTest {
         assertEquals("Ford", cars.get(0).getBrand());
         assertEquals("xyz/101", cars.get(1).getId());
         assertEquals("Toyota", cars.get(1).getBrand());
+    }
+
+    @Test
+    void testFindingCarFromCustomer() {
+        String customerId = "abc/123";
+        String carId = "xyz/102";
+
+        Car car = client.get()
+            .uri("/customers/{customerId}/cars/{carId}", customerId, carId)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(Car.class)
+            .returnResult()
+            .getResponseBody();
+
+        assertNotNull(car);
+        assertEquals(carId, car.getId());
+        assertEquals("Toyota", car.getBrand());
+        assertEquals("compact", car.getCategory());
     }
 }
