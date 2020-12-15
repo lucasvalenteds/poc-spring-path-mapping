@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     java
+    application
 }
 
 repositories {
@@ -25,6 +26,10 @@ dependencies {
     implementation("com.fasterxml.jackson.core", "jackson-databind", properties["version.jackson"].toString())
 
     testImplementation("org.junit.jupiter", "junit-jupiter", properties["version.junit"].toString())
+}
+
+configure<ApplicationPluginConvention> {
+    mainClassName = "com.example.spring.Main"
 }
 
 configure<JavaPluginConvention> {
