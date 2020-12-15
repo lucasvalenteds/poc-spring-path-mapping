@@ -1,5 +1,6 @@
 package com.example.spring.customer;
 
+import com.example.spring.car.Car;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -44,5 +45,25 @@ class CustomerControllerTest {
         assertNotNull(customer);
         assertEquals("abc/123", customer.getId());
         assertEquals("John Smith", customer.getName());
+    }
+
+    @Test
+    void testFindingCarsFromCustomer() {
+        String customerId = "def/123";
+
+        List<Car> cars = client.get()
+            .uri("/customers/{customerId}/cars", customerId)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBodyList(Car.class)
+            .returnResult()
+            .getResponseBody();
+
+        assertNotNull(cars);
+        assertEquals(2, cars.size());
+        assertEquals("xyz/100", cars.get(0).getId());
+        assertEquals("Ford", cars.get(0).getBrand());
+        assertEquals("xyz/101", cars.get(1).getId());
+        assertEquals("Toyota", cars.get(1).getBrand());
     }
 }
