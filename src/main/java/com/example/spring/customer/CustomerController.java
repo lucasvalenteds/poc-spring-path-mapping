@@ -4,9 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -27,5 +29,14 @@ public class CustomerController {
         logger.info("Returning all customers");
 
         return Flux.fromIterable(customers);
+    }
+
+    @GetMapping(path = "/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<Customer> findCustomer(@PathVariable("customerId") String customerId) {
+        logger.info("Returning customer with ID {}", customerId);
+
+        return Flux.fromIterable(customers)
+            .filter(customer -> customer.getId().equals(customerId))
+            .singleOrEmpty();
     }
 }

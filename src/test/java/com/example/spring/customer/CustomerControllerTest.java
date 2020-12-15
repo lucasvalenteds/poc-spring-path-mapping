@@ -28,4 +28,21 @@ class CustomerControllerTest {
         assertEquals("Mary Jane", customers.get(1).getName());
         assertEquals("Paul Anderson", customers.get(2).getName());
     }
+
+    @Test
+    void testFindingOneCustomer() {
+        String customerId = "abc/123";
+
+        Customer customer = client.get()
+            .uri("/customers/{customerId}", customerId)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(Customer.class)
+            .returnResult()
+            .getResponseBody();
+
+        assertNotNull(customer);
+        assertEquals("abc/123", customer.getId());
+        assertEquals("John Smith", customer.getName());
+    }
 }
