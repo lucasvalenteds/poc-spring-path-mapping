@@ -13,6 +13,8 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-core", properties["version.log4j"].toString())
     implementation("org.slf4j", "slf4j-simple", properties["version.slf4j"].toString())
 
+    implementation("org.springframework", "spring-core", properties["version.spring"].toString())
+    implementation("org.springframework", "spring-context", properties["version.spring"].toString())
     implementation("org.springframework", "spring-webflux", properties["version.spring"].toString())
     testImplementation("org.springframework", "spring-test", properties["version.spring"].toString())
 
