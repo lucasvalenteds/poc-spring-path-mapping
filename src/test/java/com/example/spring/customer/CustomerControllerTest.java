@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -38,7 +39,7 @@ class CustomerControllerTest {
             String customerId = "def/456";
 
             Customer customer = client.get()
-                .uri("/customers/{customerId}", customerId)
+                .uri("/customers/{customerId}", Map.of("customerId", customerId))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Customer.class)
@@ -46,7 +47,7 @@ class CustomerControllerTest {
                 .getResponseBody();
 
             assertNotNull(customer);
-            assertEquals("def/456", customer.getId());
+            assertEquals(customerId, customer.getId());
             assertEquals("Paul Anderson", customer.getName());
         }
 
@@ -55,7 +56,7 @@ class CustomerControllerTest {
             String customerId = "def/123";
 
             List<Car> cars = client.get()
-                .uri("/customers/{customerId}/cars", customerId)
+                .uri("/customers/{customerId}/cars", Map.of("customerId", customerId))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(Car.class)
@@ -76,7 +77,10 @@ class CustomerControllerTest {
             String carId = "xyz/102";
 
             Car car = client.get()
-                .uri("/customers/{customerId}/cars/{carId}", customerId, carId)
+                .uri("/customers/{customerId}/cars/{carId}", Map.ofEntries(
+                    Map.entry("customerId", customerId),
+                    Map.entry("carId", carId)
+                ))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Car.class)
