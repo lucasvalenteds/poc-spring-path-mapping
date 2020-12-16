@@ -27,7 +27,7 @@ public class CustomerController {
         return Flux.fromIterable(Fixtures.customers);
     }
 
-    @GetMapping("/{customerId}")
+    @GetMapping("/{customerId:.*}")
     public Mono<Customer> findCustomer(@PathVariable("customerId") String customerId) {
         logger.info("Returning customer with ID {}", customerId);
 

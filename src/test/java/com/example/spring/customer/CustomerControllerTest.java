@@ -17,6 +17,7 @@ class CustomerControllerTest {
 
     @Nested
     final class Encoded {
+
         @Test
         void testFindingAllCustomers() {
             List<Customer> customers = client.get()
@@ -91,6 +92,41 @@ class CustomerControllerTest {
             assertEquals(carId, car.getId());
             assertEquals("Toyota", car.getBrand());
             assertEquals("compact", car.getCategory());
+        }
+    }
+
+    @Nested
+    final class NotEncoded {
+
+        @Test
+        void testFindingOneCustomer() {
+            String customerId = "def/456";
+
+            client.get()
+                .uri(String.format("/customers/%s", customerId))
+                .exchange()
+                .expectStatus().isNotFound();
+        }
+
+        @Test
+        void testFindingCarsFromCustomer() {
+            String customerId = "def/123";
+
+            client.get()
+                .uri(String.format("/customers/%s/cars", customerId))
+                .exchange()
+                .expectStatus().isNotFound();
+        }
+
+        @Test
+        void testFindingCarFromCustomer() {
+            String customerId = "abc/123";
+            String carId = "xyz/102";
+
+            client.get()
+                .uri(String.format("/customers/%s/cars/%s", customerId, carId))
+                .exchange()
+                .expectStatus().isNotFound();
         }
     }
 }
