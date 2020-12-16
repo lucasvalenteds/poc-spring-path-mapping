@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 @RestController
-@RequestMapping("/cars")
+@RequestMapping(path = "/cars", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CarController {
 
     private static final Logger logger = LogManager.getLogger(CarController.class);
 
-    @GetMapping(path = "/search/full-text/{*query}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/search/full-text/{*query}")
     public Flux<Car> searchByBrandAndCategory(@PathVariable("query") String query) {
         String querySafe = query.trim().substring(1);
 
@@ -26,7 +26,7 @@ public class CarController {
             .filter(car -> car.getBrand().contains(querySafe) || car.getCategory().contains(querySafe));
     }
 
-    @GetMapping(path = "/search/release-year/{begin:[0-9]{4}}-{end:[0-9]{4}}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/search/release-year/{begin:[0-9]{4}}-{end:[0-9]{4}}")
     public Flux<Car> searchByReleaseYear(@PathVariable("begin") Integer begin,
                                          @PathVariable("end") Integer end
     ) {

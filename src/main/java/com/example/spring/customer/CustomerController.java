@@ -15,19 +15,19 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping(path = "/customers", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CustomerController {
 
     private static final Logger logger = LogManager.getLogger(CustomerController.class);
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public Flux<Customer> findCustomers() {
         logger.info("Returning all customers");
 
         return Flux.fromIterable(Fixtures.customers);
     }
 
-    @GetMapping(path = "/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{customerId}")
     public Mono<Customer> findCustomer(@PathVariable("customerId") String customerId) {
         logger.info("Returning customer with ID {}", customerId);
 
@@ -36,14 +36,14 @@ public class CustomerController {
             .singleOrEmpty();
     }
 
-    @GetMapping(path = "/{customerId}/cars", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{customerId}/cars")
     public Flux<Car> findCustomerCars(@PathVariable("customerId") String customerId) {
         logger.info("Returning cars from customer with ID {}", customerId);
 
         return Flux.fromIterable(Fixtures.customersCars.getOrDefault(customerId, List.of()));
     }
 
-    @GetMapping(path = "/{customerId}/cars/{carId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/{customerId}/cars/{carId}")
     public Mono<Car> findCustomerCars(@PathVariable("customerId") String customerId,
                                       @PathVariable("carId") String carId
     ) {
