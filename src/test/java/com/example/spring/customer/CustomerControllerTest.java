@@ -104,6 +104,21 @@ class CustomerControllerTest {
 
         @Test
         void testFindingOneCustomer() {
+            String customerId = "def/456".replace(slash, slashEncoded);
+
+            Customer customer = client.get()
+                .uri(String.format("/customers/%s", customerId))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Customer.class)
+                .returnResult()
+                .getResponseBody();
+
+            assertNull(customer);
+        }
+
+        @Test
+        void testFindingOneCustomerNotFound() {
             String customerId = "def/456";
 
             client.get()
@@ -117,7 +132,7 @@ class CustomerControllerTest {
             String customerId = "def/123".replace(slash, slashEncoded);
 
             List<Car> cars = client.get()
-                .uri("/customers/{customerId}/cars", Map.of("customerId", customerId))
+                .uri(String.format("/customers/%s/cars", customerId))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(Car.class)
@@ -144,10 +159,7 @@ class CustomerControllerTest {
             String carId = "xyz/102".replace(slash, slashEncoded);
 
             Car car = client.get()
-                .uri("/customers/{customerId}/cars/{carId}", Map.ofEntries(
-                    Map.entry("customerId", customerId),
-                    Map.entry("carId", carId)
-                ))
+                .uri(String.format("/customers/%s/cars/%s", customerId, carId))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Car.class)
