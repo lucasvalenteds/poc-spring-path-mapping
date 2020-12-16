@@ -18,9 +18,9 @@ public final class Fixtures {
     );
 
     public static final List<Car> cars = List.of(
-        new Car("xyz/100", "Ford", "truck"),
-        new Car("xyz/101", "Toyota", "truck"),
-        new Car("xyz/102", "Toyota", "compact")
+        new Car("xyz/100", "Ford", "truck", 2005),
+        new Car("xyz/101", "Toyota", "truck", 1979),
+        new Car("xyz/102", "Toyota", "compact", 2016)
     );
 
     public static final Map<String, List<Car>> customersCars = Map.ofEntries(

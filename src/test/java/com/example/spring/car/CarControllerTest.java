@@ -20,7 +20,7 @@ class CarControllerTest {
         @Test
         void testSearchingByCategory() {
             List<Car> cars = client.get()
-                .uri("/cars/{query}", Map.of("query", "truck"))
+                .uri("/cars/search/full-text/{query}", Map.of("query", "truck"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(Car.class)
@@ -36,7 +36,7 @@ class CarControllerTest {
         @Test
         void testSearchingByBrand() {
             List<Car> cars = client.get()
-                .uri("/cars/{query}", Map.of("query", "Toy"))
+                .uri("/cars/search/full-text/{query}", Map.of("query", "Toy"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(Car.class)
@@ -47,6 +47,24 @@ class CarControllerTest {
             assertEquals(2, cars.size());
             assertEquals("Toyota", cars.get(0).getBrand());
             assertEquals("Toyota", cars.get(1).getBrand());
+        }
+
+        @Test
+        void testSearchingByReleaseYearRange() {
+            List<Car> cars = client.get()
+                .uri("/cars/search/release-year/{begin}-{end}", Map.ofEntries(
+                    Map.entry("begin", 2000),
+                    Map.entry("end", 2010)
+                ))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Car.class)
+                .returnResult()
+                .getResponseBody();
+
+            assertNotNull(cars);
+            assertEquals(1, cars.size());
+            assertEquals("Ford", cars.get(0).getBrand());
         }
     }
 }

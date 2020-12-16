@@ -5,14 +5,16 @@ public final class Car {
     private String id;
     private String brand;
     private String category;
+    private Integer releaseYear;
 
     public Car() {
     }
 
-    public Car(String id, String brand, String category) {
+    public Car(String id, String brand, String category, Integer releaseYear) {
         this.id = id;
         this.brand = brand;
         this.category = category;
+        this.releaseYear = releaseYear;
     }
 
     public String getId() {
@@ -37,5 +39,13 @@ public final class Car {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Integer getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
     }
 }

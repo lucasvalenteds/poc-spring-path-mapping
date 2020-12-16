@@ -16,13 +16,23 @@ public class CarController {
 
     private static final Logger logger = LogManager.getLogger(CarController.class);
 
-    @GetMapping(path = "/{*query}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Flux<Car> search(@PathVariable("query") String query) {
+    @GetMapping(path = "/search/full-text/{*query}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Flux<Car> searchByBrandAndCategory(@PathVariable("query") String query) {
         String querySafe = query.trim().substring(1);
 
         logger.info("Searching cars using a query text: {}", querySafe);
 
         return Flux.fromIterable(Fixtures.cars)
             .filter(car -> car.getBrand().contains(querySafe) || car.getCategory().contains(querySafe));
+    }
+
+    @GetMapping(path = "/search/release-year/{begin:[0-9]{4}}-{end:[0-9]{4}}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Flux<Car> searchByReleaseYear(@PathVariable("begin") Integer begin,
+                                         @PathVariable("end") Integer end
+    ) {
+        logger.info("Searching cars by release year range: between {} and {}", begin, end);
+
+        return Flux.fromIterable(Fixtures.cars)
+            .filter(car -> car.getReleaseYear() >= begin && car.getReleaseYear() <= end);
     }
 }
