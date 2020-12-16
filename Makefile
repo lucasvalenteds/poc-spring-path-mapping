@@ -30,7 +30,7 @@ default: \
 #  }
 # ]
 test-cars-full-text:
-	@curl -sq $(API_URL)/cars/search/full-text/truck | jq
+	@curl --silent $(API_URL)/cars/search/full-text/truck | jq
 
 # [
 #   {
@@ -47,7 +47,7 @@ test-cars-full-text:
 #   }
 # ]
 test-cars-release-year:
-	@curl -sq $(API_URL)/cars/search/release-year/2000-2020 | jq
+	@curl --silent $(API_URL)/cars/search/release-year/2000-2020 | jq
 
 # [
 #   {
@@ -67,7 +67,7 @@ test-cars-release-year:
 #   }
 # ]
 test-customers:
-	@curl -sq $(API_URL)/customers | jq
+	@curl --silent $(API_URL)/customers | jq
 
 # {
 #   "id": "abc/123",
@@ -75,7 +75,7 @@ test-customers:
 #   "age": 45
 # }
 test-customer:
-	@curl -sq $(API_URL)/customers/abc$(SLASH_ENCODED)123 | jq
+	@curl --silent $(API_URL)/customers/abc$(SLASH_ENCODED)123 | jq
 
 # [
 #   {
@@ -86,7 +86,7 @@ test-customer:
 #   }
 # ]
 test-customer-cars:
-	@curl -sq $(API_URL)/customers/abc$(SLASH_ENCODED)123/cars | jq
+	@curl --silent $(API_URL)/customers/abc$(SLASH_ENCODED)123/cars | jq
 
 # {
 #   "id": "xyz/102",
@@ -95,5 +95,5 @@ test-customer-cars:
 #   "releaseYear": 2016
 # }
 test-customer-car:
-	@curl -sq $(API_URL)/customers/abc$(SLASH_ENCODED)123/cars/xyz$(SLASH_ENCODED)102 | jq
+	@curl --silent $(API_URL)/customers/abc$(SLASH_ENCODED)123/cars/xyz$(SLASH_ENCODED)102 | jq
 
