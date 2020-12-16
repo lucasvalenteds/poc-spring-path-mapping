@@ -8,9 +8,6 @@ import java.util.Map;
 
 public final class Fixtures {
 
-    private Fixtures() {
-    }
-
     public static final List<Customer> customers = List.of(
         new Customer("abc/123", "John Smith", 45),
         new Customer("def/123", "Mary Jane", 32),
@@ -29,4 +26,6 @@ public final class Fixtures {
         Map.entry(customers.get(2).getId(), List.of())
     );
 
+    private Fixtures() {
+    }
 }
