@@ -66,5 +66,27 @@ class CarControllerTest {
             assertEquals(1, cars.size());
             assertEquals("Ford", cars.get(0).getBrand());
         }
+
+        @Test
+        void testSearchingByInvalidReleaseYearRangeBegin() {
+            client.get()
+                .uri("/cars/search/release-year/{begin}-{end}", Map.ofEntries(
+                    Map.entry("begin", 20000),
+                    Map.entry("end", 2010)
+                ))
+                .exchange()
+                .expectStatus().isNotFound();
+        }
+
+        @Test
+        void testSearchingByInvalidReleaseYearRangeEnd() {
+            client.get()
+                .uri("/cars/search/release-year/{begin}-{end}", Map.ofEntries(
+                    Map.entry("begin", 2000),
+                    Map.entry("end", 20100)
+                ))
+                .exchange()
+                .expectStatus().isNotFound();
+        }
     }
 }
