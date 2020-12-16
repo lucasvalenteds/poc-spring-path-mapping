@@ -10,6 +10,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class CustomerControllerTest {
 
@@ -98,6 +99,9 @@ class CustomerControllerTest {
     @Nested
     final class NotEncoded {
 
+        private static final String slash = "/";
+        private static final String slashEncoded = "%2F";
+
         @Test
         void testFindingOneCustomer() {
             String customerId = "def/456";
@@ -110,6 +114,22 @@ class CustomerControllerTest {
 
         @Test
         void testFindingCarsFromCustomer() {
+            String customerId = "def/123".replace(slash, slashEncoded);
+
+            List<Car> cars = client.get()
+                .uri("/customers/{customerId}/cars", Map.of("customerId", customerId))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Car.class)
+                .returnResult()
+                .getResponseBody();
+
+            assertNotNull(cars);
+            assertEquals(0, cars.size());
+        }
+
+        @Test
+        void testFindingCarsFromCustomerNotFound() {
             String customerId = "def/123";
 
             client.get()
@@ -120,6 +140,25 @@ class CustomerControllerTest {
 
         @Test
         void testFindingCarFromCustomer() {
+            String customerId = "abc/123".replace(slash, slashEncoded);
+            String carId = "xyz/102".replace(slash, slashEncoded);
+
+            Car car = client.get()
+                .uri("/customers/{customerId}/cars/{carId}", Map.ofEntries(
+                    Map.entry("customerId", customerId),
+                    Map.entry("carId", carId)
+                ))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Car.class)
+                .returnResult()
+                .getResponseBody();
+
+            assertNull(car);
+        }
+
+        @Test
+        void testFindingCarFromCustomerNotFound() {
             String customerId = "abc/123";
             String carId = "xyz/102";
 
