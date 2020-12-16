@@ -4,7 +4,43 @@ API_URL = http://localhost:$(PORT)
 
 SLASH_ENCODED = %2F
 
-default: test-customers test-customer test-customer-cars test-customer-car
+default: \
+		test-cars-full-text test-cars-release-year \
+		test-customers test-customer test-customer-cars test-customer-car
+
+# [
+#  {
+#    "id": "xyz/100",
+#    "brand": "Ford",
+#    "category": "truck",
+#    "releaseYear": 2005
+#  },
+#  {
+#    "id": "xyz/101",
+#    "brand": "Toyota",
+#    "category": "truck",
+#    "releaseYear": 1979
+#  }
+# ]
+test-cars-full-text:
+	@curl -sq $(API_URL)/cars/search/full-text/truck | jq
+
+# [
+#   {
+#     "id": "xyz/100",
+#     "brand": "Ford",
+#     "category": "truck",
+#     "releaseYear": 2005
+#   },
+#   {
+#     "id": "xyz/102",
+#     "brand": "Toyota",
+#     "category": "compact",
+#     "releaseYear": 2016
+#   }
+# ]
+test-cars-release-year:
+	@curl -sq $(API_URL)/cars/search/release-year/2000-2020 | jq
 
 # [
 #   {
